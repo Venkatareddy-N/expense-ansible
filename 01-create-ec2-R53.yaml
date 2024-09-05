@@ -9,7 +9,7 @@
     - mysql
     - frontend
     - backend
-    zone: "venkatswan1991.online"
+    zone: "venkatswan.online"
   tasks:
   - name: Creating EC2 Server
     amazon.aws.ec2_instance:
