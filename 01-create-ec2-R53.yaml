@@ -9,7 +9,7 @@
     - mysql
     - frontend
     - backend
-    website: "venkatswan1991.online"
+    zone: "venkatswan1991.online"
   tasks:
   - name: Creating EC2 Server
     amazon.aws.ec2_instance:
@@ -21,14 +21,14 @@
     loop:  "{{ instances }}"
     register: ec2_instances
 
-  - name: print the output
-    ansible.builtin.debug:
-      msg: "{{ ec2_instances }}"
+  # - name: print the output
+  #   ansible.builtin.debug:
+  #     msg: "{{ ec2_instances }}"
 
   - name: Creating Route 53 Records
     amazon.aws.route53:
       state: present
-      zone: "{{ website }}"
+      zone: "{{ zone }}"
       record: "{{ item.item }}.{{ zone }}" #mysql.venkatswan.online
       type: A
       ttl: 1
