@@ -25,6 +25,7 @@
   #   ansible.builtin.debug:
   #     msg: "{{ ec2_instances }}"
 
+  #private IP R53
   - name: Creating Route 53 Records
     amazon.aws.route53:
       state: present
@@ -36,6 +37,20 @@
       wait: true
       overwrite: true
     loop:  "{{ ec2_instances.results }}"
+
+  #public IP R53 for frontend
+  - name: Creating Route 53 Records
+    amazon.aws.route53:
+      state: present
+      zone: "{{ website }}"
+      record: "{{ website }}" #venkatswan.online
+      type: A
+      ttl: 10
+      value: "{{ item.instances[0].public_ip_address }}"
+      wait: true
+      overwrite: true
+    loop:  "{{ ec2_instances.results }}"
+    when: item.item == "frontend"
 
 
   
