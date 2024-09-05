@@ -31,7 +31,7 @@
       zone: "{{ website }}"
       record: "{{ item.item }}.{{ website }}" #mysql.venkatswan.online
       type: A
-      ttl: 1
+      ttl: 10
       value: "{{ item.instances[0].private_ip_address }}"
       wait: true
     loop:  "{{ ec2_instances.results }}"
