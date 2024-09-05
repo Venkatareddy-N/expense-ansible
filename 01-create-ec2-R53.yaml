@@ -9,7 +9,7 @@
     - mysql
     - frontend
     - backend
-    zone: "venkatswan.online"
+    website: "venkatswan.online"
   tasks:
   - name: Creating EC2 Server
     amazon.aws.ec2_instance:
@@ -28,8 +28,8 @@
   - name: Creating Route 53 Records
     amazon.aws.route53:
       state: present
-      zone: "{{ zone }}"
-      record: "{{ item.item }}.{{ zone }}" #mysql.venkatswan.online
+      zone: "{{ website }}"
+      record: "{{ item.item }}.{{ website }}" #mysql.venkatswan.online
       type: A
       ttl: 1
       value: "{{ item.instances[0].private_ip_address }}"
