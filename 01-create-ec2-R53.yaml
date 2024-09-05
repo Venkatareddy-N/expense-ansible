@@ -2,7 +2,7 @@
 - hosts: local
   connection: local
   vars: 
-    ami_id: "RHEL-9-DevOps-Practice"
+    ami_id: "ami-09c813fb71547fc4f"
     subnet_id: "subnet-095d830ec8a28bee9"
     security_group_id: "sg-0ce851e2131cc0a28"
     instances:
