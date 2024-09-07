@@ -1,0 +1,18 @@
+- name: Create EC2 Instances and Route 53
+  hosts: local
+  connection: local
+  vars:
+    subnet_id: "subnet-095d830ec8a28bee9"
+    security_group_ID: "sg-0ce851e2131cc0a28"
+    AMI_ID: "ami-09c813fb71547fc4f"
+
+  tasks:
+  - name: Creating EC2 Instances
+    amazon.aws.ec2_instance:
+      name: "mysql"
+      vpc_subnet_id: {{ subnet_id }}
+      instance_type: "t3.micro"
+      security_group: {{ security_group_ID }}
+      image_id: {{ AMI_ID }}
+
+
