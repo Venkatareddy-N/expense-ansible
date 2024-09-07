@@ -10,9 +10,9 @@
   - name: Creating EC2 Instances
     amazon.aws.ec2_instance:
       name: "mysql"
-      vpc_subnet_id: {{ subnet_id }}
+      vpc_subnet_id: "{{ subnet_id }}"
       instance_type: "t3.micro"
-      security_group: {{ security_group_ID }}
-      image_id: {{ AMI_ID }}
+      security_group: "{{ security_group_ID }}"
+      image_id: "{{ AMI_ID }}"
 
 
