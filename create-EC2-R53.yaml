@@ -17,4 +17,4 @@
       instance_type: "t3.micro"
       security_group: "{{ security_group_ID }}"
       image_id: "{{ AMI_ID }}"
-    loop: "{{ instances }}
+    loop: "{{ instances }}"
