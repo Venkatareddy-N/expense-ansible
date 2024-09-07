@@ -7,7 +7,7 @@
     AMI_ID: "ami-09c813fb71547fc4f"
     instances:
     - mysql
-    - backend
+   # - backend
 
   tasks:
   - name: Creating EC2 Instances
