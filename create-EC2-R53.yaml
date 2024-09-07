@@ -7,6 +7,7 @@
     AMI_ID: "ami-09c813fb71547fc4f"
     instances:
     - mysql
+    - backend
 
   tasks:
   - name: Creating EC2 Instances
@@ -17,6 +18,3 @@
       security_group: "{{ security_group_ID }}"
       image_id: "{{ AMI_ID }}"
     loop: "{{ instances }}
-
-
-
