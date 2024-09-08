@@ -7,7 +7,8 @@
     AMI_ID: "ami-09c813fb71547fc4f"
     instances:
     - mysql
-   # - backend
+    # - backend
+    # - frontend
 
   tasks:
   - name: Creating EC2 Instances
@@ -18,3 +19,8 @@
       security_group: "{{ security_group_ID }}"
       image_id: "{{ AMI_ID }}"
     loop: "{{ instances }}"
+    register: ec2_instance
+
+  - name: Display EC2 Info
+    ansible.builtin.debug:
+      msg: "display ec2 info {{ ec2_instance }}"
