@@ -6,6 +6,12 @@
     login_host: "mysql.venkatswan.online"
 
   tasks:
+  - name: Ansible to install PyMySQL
+      ansible.builtin.pip:
+      name: 
+      - PyMySQL
+      executable: pip3.9
+
   - name: install mysql server
     ansible.builtin.package:
       name: mysql-server
@@ -25,6 +31,6 @@
     ignore_errors: true
     register: mysql_info
 
-  # - name: print mysql Info
-  #   ansible.buildin.debug:
-  #     msg: "{{ mysql_info }}"
+  - name: print mysql Info
+    ansible.buildin.debug:
+      msg: "{{ mysql_info }}"
