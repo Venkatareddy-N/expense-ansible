@@ -4,7 +4,7 @@
   vars:
     mysql_root_password: ExpenseApp@1
     login_host: mysql.venkatswan.online
-    
+
   tasks:
   - name: disable node js
     ansible.builtin.command: dnf module disable nodejs -y
@@ -51,10 +51,9 @@
     ansible.builtin.pip:
       name:
       - PyMySQL
-      - cryptography
       executable: pip3.9
 
-  - name: import mysql data
+  - name: import mysql data db
     community.mysql.mysql_db:
       login_user: root
       login_password: "{{ mysql_root_password }}"
