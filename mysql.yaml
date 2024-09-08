@@ -31,6 +31,6 @@
     ignore_errors: true
     register: mysql_info
 
-  # - name: print mysql Info
-  #   ansible.buildin.debug:
-  #     msg: "{{ mysql_info }}"
+  - name: print mysql Info
+    ansible.buildin.debug:
+      msg: "{{ mysql_info }}"
