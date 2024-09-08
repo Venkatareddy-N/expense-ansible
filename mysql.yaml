@@ -3,7 +3,7 @@
   become: yes
   vars:
     mysql_root_password: ExpenseApp@1
-    login_host: "mysql.venkatswan.online"
+    login_host: mysql.venkatswan.online
 
   tasks:
   - name: Ansible to install PyMySQL
@@ -35,6 +35,6 @@
     ansible.builtin.debug:
       msg: "{{ mysql_info }}"
 
-  - name: setting mysql root login_password
+  - name: setting mysql root password
     ansible.builtin.command: "mysql_secure_installation --set-root-pass {{ mysql_root_password }}"
     when: mysql_info.failed is true
