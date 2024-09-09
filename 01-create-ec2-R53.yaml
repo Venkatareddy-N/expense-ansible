@@ -1,4 +1,4 @@
-#!/bin/bash
+- name Create EC2 Servers and R53 Configuration
 - hosts: local
   connection: local
   vars: 
@@ -7,8 +7,8 @@
     security_group_id: "sg-0ce851e2131cc0a28"
     instances:
     - mysql
-    - frontend
-    - backend
+    # - frontend
+    # - backend
     website: "venkatswan.online"
   tasks:
   - name: Creating EC2 Server
@@ -38,16 +38,16 @@
       overwrite: true
     loop:  "{{ ec2_instances.results }}"
 
-  #public IP R53 for frontend
-  - name: Creating Route 53 Records
-    amazon.aws.route53:
-      state: present
-      zone: "{{ website }}"
-      record: "{{ website }}" #venkatswan.online
-      type: A
-      ttl: 10
-      value: "{{ item.instances[0].public_ip_address }}"
-      wait: true
-      overwrite: true
-    loop:  "{{ ec2_instances.results }}"
-    when: item.item == "frontend"
+  # #public IP R53 for frontend
+  # - name: Creating Route 53 Records
+  #   amazon.aws.route53:
+  #     state: present
+  #     zone: "{{ website }}"
+  #     record: "{{ website }}" #venkatswan.online
+  #     type: A
+  #     ttl: 10
+  #     value: "{{ item.instances[0].public_ip_address }}"
+  #     wait: true
+  #     overwrite: true
+  #   loop:  "{{ ec2_instances.results }}"
+  #   when: item.item == "frontend"
