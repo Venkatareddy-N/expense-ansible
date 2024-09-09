@@ -1,4 +1,4 @@
-- name Create EC2 Servers and R53 Configuration
+- name: Create EC2 Servers and R53 Configuration
 - hosts: local
   connection: local
   vars: 
