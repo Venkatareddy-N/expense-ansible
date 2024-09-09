@@ -3,7 +3,7 @@
   become: yes
   vars:
     mysql_root_password: ExpenseApp@1
-    mysql_host: mysql.venkatswan.online
+    login_host: mysql.venkatswan.online
   tasks:
   - name: install mysql Server
     ansible.builtin.package:
@@ -16,12 +16,13 @@
       state: started
       enabled: yes
 
-  - name: Connect mysql server
+  - name: connect mysql server
     community.mysql.mysql_info:
       login_user: root
       login_password: "{{ mysql_root_password }}"
-      login_host: "{{ mysql_host }}"
-      register: mysql_info
+      login_host: "{{ login_host }}"
+    #ignore_errors: true
+    register: mysql_info
 
   - name: print mysql info
     ansible.builtin.debug:
