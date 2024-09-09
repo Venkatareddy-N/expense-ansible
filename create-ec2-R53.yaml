@@ -7,8 +7,8 @@
     AMI_ID: "ami-09c813fb71547fc4f"
     instances:
     - mysql
-    # - backend
-    # - frontend
+    - backend
+    - frontend
     website: "venkatswan.online"
 
   tasks:
@@ -29,7 +29,7 @@
     loop: "{{ instances }}"
     register: ec2_instance
 
-  # - name: Display EC2 Info
+  # - name: Display EC2 Info to get public and provate ip values
   #   ansible.builtin.debug:
   #     msg: "{{ ec2_instance }}"
 
@@ -45,15 +45,15 @@
       overwrite: true
     loop: "{{ec2_instance.results}}"
 
-  # - name: Creating R53 Public IP Records
-  #   amazon.aws.route53:
-  #     state: present
-  #     zone: "{{ website }}" # venkatswan.online
-  #     record: "{{ website }}"  # item.venkatswan.online
-  #     type: A
-  #     ttl: 1
-  #     value: "{{ item.instances[0].public_ip_address }}"
-  #     wait: true
-  #     overwrite: true
-  #   loop: "{{ec2_instance.results}}"
-  #   when: item.item == "frontend"
+  - name: Creating R53 Public IP Records
+    amazon.aws.route53:
+      state: present
+      zone: "{{ website }}" # venkatswan.online
+      record: "{{ website }}"  # item.venkatswan.online
+      type: A
+      ttl: 1
+      value: "{{ item.instances[0].public_ip_address }}"
+      wait: true
+      overwrite: true
+    loop: "{{ec2_instance.results}}"
+    when: item.item == "frontend"
