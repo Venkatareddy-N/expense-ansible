@@ -1,53 +1,59 @@
-- name: Create EC2 Servers and R53 Configuration
-- hosts: local
+- name: Create EC2 Instances and Route 53
+  hosts: local
   connection: local
-  vars: 
-    ami_id: "ami-09c813fb71547fc4f"
-    subnet_id: "subnet-095d830ec8a28bee9"
-    security_group_id: "sg-0ce851e2131cc0a28"
+  vars:
+    subnet_id: "subnet-0ef264b33188dd701"
+    security_group_ID: "sg-0ce851e2131cc0a28"
+    AMI_ID: "ami-09c813fb71547fc4f"
     instances:
     - mysql
-    # - frontend
     # - backend
+    # - frontend
     website: "venkatswan.online"
+
   tasks:
-  - name: Creating EC2 Server
+  # - name: Ansible to install boto3 and botocore
+  #   ansible.builtin.pip:
+  #     name: 
+  #     - boto3
+  #     - botocore
+  #     executable: pip3.9
+
+  - name: Creating EC2 Instances
     amazon.aws.ec2_instance:
       name: "{{ item }}"
-      image_id: "{{ ami_id }}"
       vpc_subnet_id: "{{ subnet_id }}"
-      security_group: "{{ security_group_id }}"
       instance_type: "t3.micro"
-    loop:  "{{ instances }}"
-    register: ec2_instances
+      security_group: "{{ security_group_ID }}"
+      image_id: "{{ AMI_ID }}"
+    loop: "{{ instances }}"
+    register: ec2_instance
 
-  # - name: print the output
+  # - name: Display EC2 Info
   #   ansible.builtin.debug:
-  #     msg: "{{ ec2_instances }}"
+  #     msg: "{{ ec2_instance }}"
 
-  #private IP R53
-  - name: Creating Route 53 Records
+  - name: Creating R53 Private IP Records
     amazon.aws.route53:
       state: present
-      zone: "{{ website }}"
-      record: "{{ item.item }}.{{ website }}" #mysql.venkatswan.online
+      zone: "{{ website }}" # venkatswan.online
+      record: "{{ item.item}}.{{ website }}"  # item.venkatswan.online
       type: A
-      ttl: 10
+      ttl: 1
       value: "{{ item.instances[0].private_ip_address }}"
       wait: true
       overwrite: true
-    loop:  "{{ ec2_instances.results }}"
+    loop: "{{ec2_instance.results}}"
 
-  # #public IP R53 for frontend
-  # - name: Creating Route 53 Records
+  # - name: Creating R53 Public IP Records
   #   amazon.aws.route53:
   #     state: present
-  #     zone: "{{ website }}"
-  #     record: "{{ website }}" #venkatswan.online
+  #     zone: "{{ website }}" # venkatswan.online
+  #     record: "{{ website }}"  # item.venkatswan.online
   #     type: A
-  #     ttl: 10
+  #     ttl: 1
   #     value: "{{ item.instances[0].public_ip_address }}"
   #     wait: true
   #     overwrite: true
-  #   loop:  "{{ ec2_instances.results }}"
+  #   loop: "{{ec2_instance.results}}"
   #   when: item.item == "frontend"
