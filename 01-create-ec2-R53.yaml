@@ -1,0 +1,59 @@
+- name: Create EC2 Instances and Route 53
+  hosts: local
+  connection: local
+  vars:
+    subnet_id: "subnet-0ef264b33188dd701"
+    security_group_ID: "sg-0ce851e2131cc0a28"
+    AMI_ID: "ami-09c813fb71547fc4f"
+    instances:
+    - mysql
+    - backend
+    - frontend
+    website: "venkatswan.online"
+
+  tasks:
+  - name: Ansible to install boto3 and botocore
+    ansible.builtin.pip:
+      name: 
+      - boto3
+      - botocore
+      executable: pip3.9
+
+  - name: Creating EC2 Instances
+    amazon.aws.ec2_instance:
+      name: "{{ item }}"
+      vpc_subnet_id: "{{ subnet_id }}"
+      instance_type: "t3.micro"
+      security_group: "{{ security_group_ID }}"
+      image_id: "{{ AMI_ID }}"
+    loop: "{{ instances }}"
+    register: ec2_instance
+
+  # - name: Display EC2 Info to get public and provate ip values
+  #   ansible.builtin.debug:
+  #     msg: "{{ ec2_instance }}"
+
+  - name: Creating R53 Private IP Records
+    amazon.aws.route53:
+      state: present
+      zone: "{{ website }}" # venkatswan.online
+      record: "{{ item.item}}.{{ website }}"  # item.venkatswan.online
+      type: A
+      ttl: 1
+      value: "{{ item.instances[0].private_ip_address }}"
+      wait: true
+      overwrite: true
+    loop: "{{ec2_instance.results}}"
+
+  - name: Creating R53 Public IP Records
+    amazon.aws.route53:
+      state: present
+      zone: "{{ website }}" # venkatswan.online
+      record: "{{ website }}"  # item.venkatswan.online
+      type: A
+      ttl: 1
+      value: "{{ item.instances[0].public_ip_address }}"
+      wait: true
+      overwrite: true
+    loop: "{{ec2_instance.results}}"
+    when: item.item == "frontend"
